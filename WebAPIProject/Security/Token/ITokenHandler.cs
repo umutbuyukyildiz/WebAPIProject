@@ -11,7 +11,7 @@ namespace WebAPIProject.Security.Token
 
         AccessToken CreateAccessToken(User user);
 
-
+        
        void RevokeRefreshToken(User user);
         
     }
