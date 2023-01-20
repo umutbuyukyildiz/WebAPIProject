@@ -35,6 +35,14 @@ namespace WebAPIProject
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ITokenHandler, TokenHandler>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            
+
+
+
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -44,22 +52,25 @@ namespace WebAPIProject
             
 
 
-            services.AddCors(opts =>
-            {
-                opts.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+            services.AddCors(options => options.AddPolicy("ApiCorsPolicy", builder =>
 
-                });
+             {
 
-                //policy örneði --projede default policy kullanýyoruz --
-                //opts.AddPolicy("abcPolicy", builder =>
-                // {
-                //     builder.WithOrigins("https://www.abc.com").AllowAnyHeader().AllowAnyMethod();
+                 builder
 
-                // });
+                  .AllowAnyMethod()
 
-            });
+                  .AllowAnyHeader()
+
+                  .WithOrigins("http://localhost:44379", "http://localhost:44374")
+
+                  .AllowCredentials()
+
+                  .SetIsOriginAllowed((host) => true);
+
+
+
+             }));
 
             services.Configure<TokenOptions>(Configuration.GetSection("TokenOptions"));
 
@@ -75,7 +86,9 @@ namespace WebAPIProject
                     ValidateIssuerSigningKey=true,
                     ValidIssuer = tokenOptions.Issuer,
                     ValidAudience=tokenOptions.Audience,
-                    IssuerSigningKey=SignHandler.GetSecurityKey(tokenOptions.SecurityKey)
+                    IssuerSigningKey=SignHandler.GetSecurityKey(tokenOptions.SecurityKey),
+                    ClockSkew=TimeSpan.Zero
+
                     
                    
                 };
@@ -114,15 +127,16 @@ namespace WebAPIProject
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
+            app.UseCors("ApiCorsPolicy");
             app.UseAuthentication();
+            app.UseAuthorization();
+           
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseCors();
+          
             
         }
     }

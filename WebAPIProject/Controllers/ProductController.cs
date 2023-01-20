@@ -10,9 +10,11 @@ using WebAPIProject.Domain.Responses;
 using WebAPIProject.Resources;
 using WebAPIProject.Extensions;
 using WebAPIProject.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPIProject.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
@@ -48,6 +50,7 @@ namespace WebAPIProject.Controllers
                 return BadRequest(productListResponse.Message);
             }
         } 
+
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetFindById(int id)

@@ -16,6 +16,11 @@ namespace WebAPIProject.Domain.UnitOfWork
             this.context = context;
         }
 
+        public void Complete()
+        {
+            this.context.SaveChanges();
+        }
+
         public async Task CompleteAsync()
         {
 

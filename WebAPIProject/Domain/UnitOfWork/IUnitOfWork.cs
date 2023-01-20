@@ -9,5 +9,7 @@ namespace WebAPIProject.Domain.UnitOfWork
     {
         Task CompleteAsync();
 
+        void Complete();
+
     }
 }

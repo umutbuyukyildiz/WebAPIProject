@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "Spa";
+}
+@section Scripts 
+    {
+
+   <script type="text/javascript" >
+
+       $(document).ready(function() {
+
+           $("#btnSave").click(function(){
+
+
+               let name = $("#Name").val();
+               let surname = $("#SurName").val();
+               let email = $("#Email").val();
+               let password = $("#Password").val();
+
+               let user = { "Name": name, "SurName": surname, "Email": email, "Password": password, }
+
+               var url = "https://localhost:44379/api/user";
+               $.ajax({
+                   type: "POST",
+                   crossDomain: true,
+                   url: url,
+                   data: JSON.stringify(user),
+                   success: function (data) {
+                       console.table(data);
+                   },
+                   error: function (error) {console.error(error)},
+                   contentType: "application/json",
+                   dataType:"json"
+
+
+
+
+               })
+
+
+       })
+
+           
+       })
+
+
+
+
+
+
+
+
+
+
+   </script>
+
+
+
+
+
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Üye Kayıt Formu</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="Name" placeholder="İsminiz" value="Umut" />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="SurName" placeholder="Soy isminiz" value="Büyükyıldız" />
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="Email" placeholder="Emailiniz" value="umut.buyukyildiz@gmail.com" />
+                </div>
+
+                <div class="form-group">
+                    <input type="password" class="form-control" id="Password" placeholder="Şifreniz" value="1234" />
+                </div>
+
+                <button type="button" id="btnSave" class="btn btn-primary" >Kaydet</button>
+
+            </form>
+
+
+        </div>
+        <div class="col-md-6"></div>
+
+
+
+
+    </div>
+
+
+</div>
+
